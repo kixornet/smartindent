@@ -30,20 +30,22 @@ function SetTabsOrSpaces()
 
 		" check for space indent up to 8
 		let validWidth = [0,0,0,0,0,0,0,0,0]
+		let singleArray = ["","","","","","","","",""]
 
 		" lines with single indent are key to figuring out spacing, try to count these
 		for testWidth in range(8,1,-1)
 			" built regex string to find lines with one spacer indent
-			let testexpr = "^"
+			let singleexpr = "^"
 			for i in range(1,testWidth,1)
-				let testexpr = testexpr." "
+				let singleexpr = singleexpr." "
 			endfor
-			let testexpr = testexpr."[^ ]"
-			"echo testexpr
+			let singleexpr = singleexpr."[^ ]"
+			let singleArray[testWidth] = singleexpr
+			"echo singleexpr
 
 			for lineNum in range(1,linesToTest)
 				let line = join(getbufline(bufname("%"), lineNum, lineNum))
-				let spaces = matchstr(line, testexpr)
+				let spaces = matchstr(line, singleArray[testWidth])
 				let spaceCount = strlen(spaces)
 				"let spaceCount = len(filter(getbufline(bufname("%"), lineNum, lineNum), 'v:val =~ "^ "'))
 				"echo line."_".spaces."_".spaceCount."_"
