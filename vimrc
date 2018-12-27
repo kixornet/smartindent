@@ -89,6 +89,15 @@ endfunction
 " Call the function after opening a buffer
 autocmd BufReadPost * call SetTabsOrSpaces()
 
+function CheckSpacer()
+    if &expandtab == "1"
+        let c = &softtabstop
+        echo "SpacerMode: ".c." spaces"
+    else
+        echo "SpacerMode: tabs"
+    endif
+endfunction
+
 function UseTabs()
     set shiftwidth=4
     set tabstop=4
