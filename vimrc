@@ -46,12 +46,11 @@ function SetTabsOrSpaces()
 
 		for lineNum in range(1,linesToTest)
 				let line = join(getbufline(bufname("%"), lineNum, lineNum))
+
 				for testWidth in range(8,1,-1)
-					let spaces = matchstr(line, singleArray[testWidth])
-					let spaceCount = strlen(spaces)
-					"let spaceCount = len(filter(getbufline(bufname("%"), lineNum, lineNum), 'v:val =~ "^ "'))
-					"echo line."_".spaces."_".spaceCount."_"
-					let startsWithSpacer = spaceCount > 0
+					let singleSpacerMatch = matchstr(line, singleArray[testWidth])
+					let singleCount = strlen(singleSpacerMatch)
+					let startsWithSpacer = singleCount > 0
 					if startsWithSpacer
 						let validWidth[testWidth] = validWidth[testWidth] + 1
 					endif
