@@ -44,8 +44,11 @@ function SetTabsOrSpaces()
 			"echo singleexpr
 		endfor
 
+		let testexpr = '^ \+'
 		for lineNum in range(1,linesToTest)
 				let line = join(getbufline(bufname("%"), lineNum, lineNum))
+				let spacesMatch = matchstr(line, testexpr)
+				let spaceCount = strlen(spacesMatch)
 
 				for testWidth in range(8,1,-1)
 					let singleSpacerMatch = matchstr(line, singleArray[testWidth])
@@ -54,25 +57,15 @@ function SetTabsOrSpaces()
 					if startsWithSpacer
 						let validWidth[testWidth] = validWidth[testWidth] + 1
 					endif
-				endfor
-		endfor
 
-		" count lines based on modulus of spacing
-		for testWidth in range(8,1,-1)
-			let testexpr = '^ \+'
-			for lineNum in range(1,linesToTest)
-				let line = join(getbufline(bufname("%"), lineNum, lineNum))
-				let spacesMatch = matchstr(line, testexpr)
-				let spaceCount = strlen(spacesMatch)
-				"let spaceCount = len(filter(getbufline(bufname("%"), lineNum, lineNum), 'v:val =~ "^ "'))
-				"echo line."_".spaces."_".spaceCount."_"
-				let countMatchesWidth = spaceCount%testWidth == 0
-				let nonZeroLength = spaceCount > 0
-				if countMatchesWidth && nonZeroLength
-					"echo spaceCount." ".testWidth
-					let validWidth[testWidth] = validWidth[testWidth] + 1
-				endif
-			endfor
+					let countMatchesWidth = spaceCount%testWidth == 0
+					let nonZeroLength = spaceCount > 0
+					if countMatchesWidth && nonZeroLength
+						"echo spaceCount." ".testWidth
+						let validWidth[testWidth] = validWidth[testWidth] + 1
+					endif
+
+				endfor
 		endfor
 
 		" now guess based on counts
