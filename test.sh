@@ -25,5 +25,5 @@ cat temp.large temp.large temp.large temp.large temp.large temp.large temp.large
 for f in `ls temp.*`
 do
 	echo "${f}"
-	time -p vim -S exit.vim -u vimrc "${f}"
+	time -p vim -n -S exit.vim -u vimrc "${f}"
 done
