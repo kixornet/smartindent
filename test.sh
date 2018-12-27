@@ -22,8 +22,10 @@ vim -n -e -s -u vimrc +'%s/\t/        /g' +'wq' temp.space8
 cat temp.space7 temp.space7 temp.space7 temp.space7 temp.space7 temp.space7 temp.space7 temp.space7 temp.space7 temp.space7 temp.space7 temp.space7 temp.space7 temp.space7 temp.space7 temp.space7 > temp.large
 cat temp.large temp.large temp.large temp.large temp.large temp.large temp.large temp.large temp.large temp.large temp.large temp.large temp.large temp.large temp.large temp.large > temp.large_very
 
+#run timing test
+rm temp.timings
 for f in `ls temp.*`
 do
-	echo "${f}"
-	time -p vim -n -S exit.vim -u vimrc "${f}"
+	echo "${f}" >> temp.timings
+	time -p vim -n -S exit.vim -u vimrc "${f}" 2>> temp.timings
 done
