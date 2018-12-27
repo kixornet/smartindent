@@ -32,9 +32,8 @@ function SetTabsOrSpaces()
 		let validWidth = [0,0,0,0,0,0,0,0,0]
 		let singleArray = ["","","","","","","","",""]
 
-		" lines with single indent are key to figuring out spacing, try to count these
+		" build regex string to find lines with one spacer indent
 		for testWidth in range(8,1,-1)
-			" built regex string to find lines with one spacer indent
 			let singleexpr = "^"
 			for i in range(1,testWidth,1)
 				let singleexpr = singleexpr." "
@@ -46,26 +45,28 @@ function SetTabsOrSpaces()
 
 		let testexpr = '^ \+'
 		for lineNum in range(1,linesToTest)
-				let line = join(getbufline(bufname("%"), lineNum, lineNum))
-				let spacesMatch = matchstr(line, testexpr)
-				let spaceCount = strlen(spacesMatch)
+			let line = join(getbufline(bufname("%"), lineNum, lineNum))
+			let spacesMatch = matchstr(line, testexpr)
+			let spaceCount = strlen(spacesMatch)
 
-				for testWidth in range(8,1,-1)
-					let singleSpacerMatch = matchstr(line, singleArray[testWidth])
-					let singleCount = strlen(singleSpacerMatch)
-					let startsWithSpacer = singleCount > 0
-					if startsWithSpacer
-						let validWidth[testWidth] = validWidth[testWidth] + 1
-					endif
+			for testWidth in range(8,1,-1)
+				" lines with single indent are key to figuring out spacing, try to count these
+				let singleSpacerMatch = matchstr(line, singleArray[testWidth])
+				let singleCount = strlen(singleSpacerMatch)
+				let startsWithSpacer = singleCount > 0
+				if startsWithSpacer
+					let validWidth[testWidth] = validWidth[testWidth] + 1
+				endif
 
-					let countMatchesWidth = spaceCount%testWidth == 0
-					let nonZeroLength = spaceCount > 0
-					if countMatchesWidth && nonZeroLength
-						"echo spaceCount." ".testWidth
-						let validWidth[testWidth] = validWidth[testWidth] + 1
-					endif
+				" count modulus spacers
+				let countMatchesWidth = spaceCount%testWidth == 0
+				let nonZeroLength = spaceCount > 0
+				if countMatchesWidth && nonZeroLength
+					"echo spaceCount." ".testWidth
+					let validWidth[testWidth] = validWidth[testWidth] + 1
+				endif
 
-				endfor
+			endfor
 		endfor
 
 		" now guess based on counts
