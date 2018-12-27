@@ -27,5 +27,5 @@ rm temp.timings
 for f in `ls temp.*`
 do
 	echo "${f}" >> temp.timings
-	time -p vim -n -S exit.vim -u vimrc "${f}" 2>> temp.timings
+	time -p vim -n -u vimrc +'quit' "${f}" 2>> temp.timings
 done
